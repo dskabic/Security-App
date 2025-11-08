@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Security App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#4f46e5">
+  
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800">
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-blue-500 text-white">
+        <div class="max-w-6xl mx-auto">
+            <nav class="px-4 sm:px-6">
+                <div class="flex items-center justify-between py-4">
+                    <a href="/" class="select-none no-underline">
+                        <span class="block font-extrabold tracking-wide text-white text-2xl sm:text-3xl">
+                            Security App
+                        </span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-6 md:pt-10 pb-4 md:pb-6">
+        <div class="max-w-xl mx-auto">
+	<div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+		<div class="px-6 py-5 bg-gradient-to-r from-indigo-50 to-white">
+			<h2 class="text-xl sm:text-2xl font-semibold text-gray-900">Choose form</h2>
+		</div>
+		<div class="px-6 py-6">
+			<a href="/validcsrf" class="w-full inline-flex justify-center items-center px-4 py-3 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 mb-2">Valid Form</a>
+            <a href="/attackcsrf" class="w-full inline-flex justify-center items-center px-4 py-3 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">Attacker Form</a>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+    </main>
+
+    
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 text-center text-sm text-gray-500">
+        <span>&copy; <span id="year"></span> Security App</span>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

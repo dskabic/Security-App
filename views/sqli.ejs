@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Security App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#4f46e5">
+  
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800">
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-blue-500 text-white">
+        <div class="max-w-6xl mx-auto">
+            <nav class="px-4 sm:px-6">
+                <div class="flex items-center justify-between py-4">
+                    <a href="/" class="select-none no-underline">
+                        <span class="block font-extrabold tracking-wide text-white text-2xl sm:text-3xl">
+                            Security App
+                        </span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-6 md:pt-10 pb-4 md:pb-6">
+        <div class="max-w-xl mx-auto">
+	<div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+		<div class="px-6 py-5 bg-gradient-to-r from-indigo-50 to-white">
+			<h2 class="text-xl sm:text-2xl font-semibold text-gray-900">SQL injection</h2>
+            <p class="text-sm text-gray-500 mt-1">Fill in the details below to login</p>
+		</div>
+		<div class="px-6 py-6">
+			<form action="/sec/login" method="post" class="space-y-5">
+				<div>
+					<label for="vulnerability" class="block text-sm font-medium text-gray-700">Toggle Vulnerability</label>
+					<input type="checkbox" id="vulnerability" name="vulnerability" <%= (oldData && oldData.vulnerability) ? 'checked' : '' %> class="mt-3 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500" />
+				</div>
+                <div>
+					<label for="username" class="block text-sm font-medium text-gray-700">Enter your Username</label>
+					<input type="text" id="username" name="username" placeholder="e.g. JohnDoe" value="<%= oldData?.username || '' %>" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+				</div>
+
+				<div>
+					<label for="password" class="block text-sm font-medium text-gray-700">Enter your Password</label>
+					<input type="password" id="password" name="password" placeholder="Enter your password" value="<%= oldData?.password || '' %>" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+				</div>
+
+				<button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+					Save
+				</button>
+			</form>
+             <% if (error) { %>
+    <p class="text-red-600 font-semibold"><%= error %></p>
+  <% } %>
+
+  <% if (results && results.length > 0) { %>
+    <h3 class="text-lg font-semibold mb-2">Query Results:</h3>
+    <ul class="list-disc list-inside">
+      <% results.forEach(row => { %>
+        <li><%= JSON.stringify(row) %></li>
+      <% }) %>
+    </ul>
+  <% } else if (results) { %>
+    <p class="text-gray-600">No results found</p>
+  <% } %>
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+    </main>
+
+    
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 text-center text-sm text-gray-500">
+        <span>&copy; <span id="year"></span> Security App</span>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Security App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#4f46e5">
+  
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800">
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-blue-500 text-white">
+        <div class="max-w-6xl mx-auto">
+            <nav class="px-4 sm:px-6">
+                <div class="flex items-center justify-between py-4">
+                    <a href="/" class="select-none no-underline">
+                        <span class="block font-extrabold tracking-wide text-white text-2xl sm:text-3xl">
+                            Security App
+                        </span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-6 md:pt-10 pb-4 md:pb-6">
+    <div class="max-w-xl mx-auto">
+        <div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+            <div class="px-6 py-5 bg-gradient-to-r from-indigo-50 to-white">
+                <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">Cross Site Request Forgery</h2>
+                <p class="text-sm text-gray-500 mt-1">Fill in the details below to login</p>
+            </div>
+            <div class="px-6 py-6">
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">Change Username</h3>
+                    </div>
+                    <form action="/validcsrf" method="post" class="space-y-5" onsubmit="recall()">
+                        <div>
+                            <label for="newusername" class="block text-sm font-medium text-gray-700">Enter new Username</label>
+                            <input type="text" id="newusername" name="newusername" value="<%= oldData?.username || '' %>" placeholder="e.g. JohnDoe" class="mt-1 w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+                        </div>
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button type="submit" class="w-full inline-flex justify-center items-center px-4 py-3 rounded-lg bg-emerald-600 text-white font-medium hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500">
+                            Change Username
+                        </button>
+                    </form>
+                    <div id="result" class="box" style="display:none">
+                        <p><strong>Old username:</strong> <span id="oldusername"></span></p>
+                        <p><strong>New username:</strong> <span id="newusernamee"></span></p>
+                        <p><strong>Message:</strong> <span id="message"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </main>
+
+    
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 text-center text-sm text-gray-500">
+        <span>&copy; <span id="year"></span> Security App</span>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+<script>
+    async function recall() {
+        event.preventDefault();
+        const csrfToken = '<%= csrfToken %>';
+        try {
+          const res = await fetch('/validcsrf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'X-CSRF-Token': csrfToken },
+          credentials: 'include',            
+          body: JSON.stringify({ newusername: document.getElementById('newusername').value })
+        });
+        const text = await res.text();
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+            console.log('Response text:', text);
+            return;
+        }
+        console.log('Response data:', data);
+        document.getElementById('oldusername').textContent = data.oldusername;
+        document.getElementById('newusernamee').textContent = data.newusername;
+        document.getElementById('message').textContent = data.message;
+        document.getElementById('result').style.display = 'block';
+        } catch (err) {
+          console.error('Error during fetch:', err);
+        }
+    }
+</script>
+</html>

