@@ -1,15 +1,17 @@
 require('dotenv').config()
 const express = require('express')
-const app = express()
-const helmet = require('helmet');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const csurf = require('csurf');
+const helmet = require('helmet');
+const app = express()
 app.set("view engine", "ejs");
 const sqlController =  require('./controllers/sqlController');
-const csurf = require('csurf');
-const cookieParser = require('cookie-parser');
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.json())
-app.use(bodyParser.urlencoded({ extended: true }));
+
 const csrfProtection = csurf({ cookie: true });
 app.use(helmet());
 const externalUrl = process.env.RENDER_EXTERNAL_URL;
