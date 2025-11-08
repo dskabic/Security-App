@@ -1,19 +1,14 @@
 require('dotenv').config()
 const express = require('express')
-const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
-const csurf = require('csurf');
-const helmet = require('helmet');
 const app = express()
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.set("view engine", "ejs");
 const sqlController =  require('./controllers/sqlController');
-
-app.use(bodyParser.urlencoded({ extended: true }));
+const csurf = require('csurf');
+const cookieParser = require('cookie-parser');
 app.use(cookieParser());
-app.use(express.json())
-
 const csrfProtection = csurf({ cookie: true });
-app.use(helmet());
 const externalUrl = process.env.RENDER_EXTERNAL_URL;
 const port = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.get('/', (req, res) => {
