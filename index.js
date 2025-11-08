@@ -10,6 +10,7 @@ app.use(cookieParser());
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 const csrfProtection = csurf({ cookie: true });
+app.use(helmet());
 const externalUrl = process.env.RENDER_EXTERNAL_URL;
 const port = externalUrl && process.env.PORT ? parseInt(process.env.PORT) : 3000;
 app.get('/', (req, res) => {
